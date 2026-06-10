@@ -23,10 +23,17 @@ export default function Home() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="flex items-center justify-center">
+        <Error error={error} />
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 *:h-24 gap-4">
       <CreateNote />
-      {error && <Error error={error} />}
       {notes.map((note) => (
         <Link
           to={`/note/${note._id}`}

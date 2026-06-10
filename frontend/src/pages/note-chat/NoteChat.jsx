@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ChatPage from "./ChatPage";
+import NoteDetails from "../../components/__comp/NoteDetails";
 
 const NoteChat = () => {
   const containerRef = useRef(null);
@@ -35,10 +36,11 @@ const NoteChat = () => {
   return (
     <div ref={containerRef} className="flex h-full w-full">
       <aside
-        className="overflow-y-scroll shrink-0 bg-base-300 p-2 rounded"
+        className="overflow-y-scroll shrink-0 bg-base-300 rounded"
         style={{ width: leftWidth }}
       >
         {/* Sidebar */}
+        <NoteDetails />
       </aside>
 
       {/* left resizer */}
@@ -48,7 +50,7 @@ const NoteChat = () => {
         className="bg-transparent hover:bg-gray-200 ml-1"
       />
 
-      <div className="mx-1 flex-1 bg-base-300 rounded p-2 overflow-y-scroll">
+      <div className="mx-1 flex-1 bg-base-300 rounded overflow-y-scroll">
         <ChatPage />
       </div>
 
@@ -60,7 +62,7 @@ const NoteChat = () => {
       />
 
       <aside
-        className="overflow-y-scroll shrink-0 bg-base-300 p-2 rounded"
+        className="overflow-y-scroll shrink-0 bg-base-300 rounded"
         style={{ width: rightWidth }}
       >
         {/* StatusSidebar */}

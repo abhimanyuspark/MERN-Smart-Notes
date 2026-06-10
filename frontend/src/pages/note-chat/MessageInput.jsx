@@ -5,7 +5,7 @@ import { sendMessage } from "../../redux/features/chat";
 function MessageInput() {
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
-  const { chat, loading } = useSelector((state) => state.chat);
+  const { chat, sending, error } = useSelector((state) => state.chat);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,14 +29,17 @@ function MessageInput() {
     >
       <div className="flex items-center gap-3 px-4 py-2">
         <input
-          value={message}
+          value={message || error}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Ask about your notes..."
           className="flex-1 outline-none bg-transparent"
         />
 
-        <button type="submit" className="btn btn-accent">
-          {loading ? "Sending..." : "Send"}
+        <button
+          type="submit"
+          className={`btn btn-accent rounded ${!message.trim() ? "cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          {sending ? "Sending..." : "Send"}
         </button>
       </div>
     </form>

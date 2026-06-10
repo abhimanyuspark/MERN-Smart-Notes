@@ -5,6 +5,7 @@ import {
   getAllNotes,
   getSingleNote,
   deleteNote,
+  addFilesToNote,
 } from "../controllers/note.controller.js";
 
 import { protectRoute } from "../middlewares/auth.middleware.js";
@@ -18,6 +19,13 @@ router.post(
   protectRoute,
   upload.array("files", 20),
   createNoteWithFiles,
+);
+
+router.post(
+  "/upload/:noteId",
+  protectRoute,
+  upload.array("files", 20),
+  addFilesToNote,
 );
 
 router.get("/", protectRoute, getAllNotes);

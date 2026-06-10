@@ -30,6 +30,20 @@ export const uploadNote = createAsyncThunk(
   },
 );
 
+// Add Files To Note
+export const addFilesToNote = createAsyncThunk(
+  "notes/addFilesToNote",
+  async ({ noteId, data }, { rejectWithValue }) => {
+    try {
+      const res = await api.post(`/notes/upload/${noteId}`, data);
+      return res.data;
+    } catch (error) {
+      const errMsg = errorFun(error);
+      return rejectWithValue(errMsg);
+    }
+  },
+);
+
 export const uploadNoteId = createAsyncThunk(
   "notes/uploadNoteId",
   async (id, { rejectWithValue }) => {
@@ -75,6 +89,19 @@ const noteSlice = createSlice({
         state.notes.unshift(action.payload.note);
       })
       .addCase(uploadNote.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
+      .addCase(addFilesToNote.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addFilesToNote.fulfilled, (state, action) => {
+        state.loading = false;
+        state.note = action.payload.note;
+      })
+      .addCase(addFilesToNote.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       })
 

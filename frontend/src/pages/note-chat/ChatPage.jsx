@@ -15,10 +15,8 @@ function ChatPage() {
   }, [id]);
 
   return (
-    <div className="flex flex-col gap-4 relative">
+    <div className="flex flex-col gap-4 relative h-full">
       <ChatMessages />
-      {!note && <div className="h-full">Not Found</div>}
-
       <MessageInput />
     </div>
   );

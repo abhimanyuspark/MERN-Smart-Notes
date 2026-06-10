@@ -4,7 +4,7 @@ import MessageBubble from "./MessageBubble";
 import MessageString from "./MessageString";
 
 function ChatMessages() {
-  const { messages, loading } = useSelector((state) => state.chat);
+  const { chat, messages, loading } = useSelector((state) => state.chat);
 
   const bottomRef = useRef();
 
@@ -15,19 +15,21 @@ function ChatMessages() {
   }, [messages]);
 
   if (loading) {
-    return (
-      <div className="flex-1 flex items-center justify-center">Loading...</div>
-    );
+    return <div className="flex items-center justify-center">Loading...</div>;
   }
 
   return (
-    <div className="flex gap-4 flex-col">
+    <div className="flex gap-4 flex-col p-2">
+      <h2 className="text-3xl mx-2 my-8 font-bold">
+        {String(chat?.title).split(" - ").at(1)}
+      </h2>
+
       {messages.map((msg, index) => {
         const type = typeof msg.content === "string";
         if (!type) {
-          return <MessageBubble key={msg._id || index} message={msg} />;
+          return <MessageBubble key={index} message={msg} />;
         } else {
-          return <MessageString msg={msg} index={index} />;
+          return <MessageString key={index} msg={msg} index={index} />;
         }
       })}
 

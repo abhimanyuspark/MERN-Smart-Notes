@@ -1,10 +1,7 @@
 import { useEffect } from "react";
-import { useParams, Link } from "react-router";
+import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { api } from "../../redux/axios";
-import { useState } from "react";
 import { uploadNoteId } from "../../redux/features/note";
-import ChatPage from "./ChatPage";
 import NoteChat from "./NoteChat";
 
 export default function NotePage() {

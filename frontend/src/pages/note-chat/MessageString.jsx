@@ -19,10 +19,8 @@ const MessageString = ({ msg, index }) => {
   };
 
   return (
-    <div key={index} className="rounded p-5 mb-6 bg-base-100">
-      <h2 className="font-bold text-xl">{content?.title}</h2>
-
-      <p className="mt-3">{content?.summary}</p>
+    <div key={index} className="rounded p-4 mb-6 bg-base-100">
+      <p>{content?.summary}</p>
 
       <div className="mt-5">
         <h3 className="font-semibold">Suggested Questions</h3>

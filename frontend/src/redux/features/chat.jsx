@@ -81,7 +81,6 @@ const chatSlice = createSlice({
 
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.sending = false;
-
         state.messages.push(action.payload.message);
       })
 
