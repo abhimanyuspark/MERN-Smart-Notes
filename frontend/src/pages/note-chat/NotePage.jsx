@@ -5,6 +5,7 @@ import { api } from "../../redux/axios";
 import { useState } from "react";
 import { uploadNoteId } from "../../redux/features/note";
 import ChatPage from "./ChatPage";
+import NoteChat from "./NoteChat";
 
 export default function NotePage() {
   const { id } = useParams();
@@ -16,14 +17,8 @@ export default function NotePage() {
   }, [dispatch, id]);
 
   if (loading || !note) {
-    return <div className="p-6 text-center">Loading note...</div>;
+    return <div className="p-6 text-center">Loading...</div>;
   }
 
-  return (
-    <div className="p-6">
-      {/* LEFT SIDE - NOTE INFO */}
-
-      <ChatPage />
-    </div>
-  );
+  return <NoteChat />;
 }

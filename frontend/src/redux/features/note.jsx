@@ -3,10 +3,18 @@ import { errorFun } from "../../utils/errFun";
 import { api } from "../axios";
 
 // GET NOTES
-export const fetchNotes = createAsyncThunk("notes/fetch", async () => {
-  const res = await api.get("/notes");
-  return res.data.notes;
-});
+export const fetchNotes = createAsyncThunk(
+  "notes/fetch",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.get("/notes");
+      return res.data.notes;
+    } catch (error) {
+      const errMsg = errorFun(error);
+      return rejectWithValue(errMsg);
+    }
+  },
+);
 
 // UPLOAD NOTE
 export const uploadNote = createAsyncThunk(
@@ -14,7 +22,7 @@ export const uploadNote = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.post("/notes/upload", data);
-      return res.data.note;
+      return res.data;
     } catch (error) {
       const errMsg = errorFun(error);
       return rejectWithValue(errMsg);
@@ -61,18 +69,15 @@ const noteSlice = createSlice({
       })
 
       .addCase(uploadNote.pending, (state, action) => {
-        state.loading = true;
         state.error = null;
-        state.notes = [];
       })
       .addCase(uploadNote.fulfilled, (state, action) => {
-        state.loading = false;
-        state.notes.unshift(action.payload);
+        state.notes.unshift(action.payload.note);
       })
       .addCase(uploadNote.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload;
       })
+
       .addCase(uploadNoteId.pending, (state, action) => {
         state.loading = true;
         state.error = null;

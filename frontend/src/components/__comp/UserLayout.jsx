@@ -8,11 +8,11 @@ const UserLayout = () => {
 
   return (
     <div className="h-screen w-screen" data-theme={theme}>
-      <header className="w-full h-16">
+      <header className="w-full h-16 fixed top-0 left-0 z-50">
         <Header />
       </header>
 
-      <main className="p-4 h-[calc(100vh-4rem)] w-full">
+      <main className="p-4 w-full pt-20 h-full">
         <Outlet />
       </main>
     </div>

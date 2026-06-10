@@ -1,26 +1,29 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../axios";
+import { errorFun } from "../../utils/errFun";
 
 export const getChatMessages = createAsyncThunk(
   "chat/getMessages",
-  async (chatId, thunkAPI) => {
+  async (chatId, { rejectWithValue }) => {
     try {
       const { data } = await api.get(`chats/${chatId}/messages`);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message);
+      const errMsg = errorFun(error);
+      return rejectWithValue(errMsg);
     }
   },
 );
 
 export const sendMessage = createAsyncThunk(
   "chat/sendMessage",
-  async ({ chatId, message }, thunkAPI) => {
+  async ({ chatId, message }, { rejectWithValue }) => {
     try {
       const { data } = await api.post(`chats/${chatId}/message`, { message });
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message);
+      const errMsg = errorFun(error);
+      return rejectWithValue(errMsg);
     }
   },
 );
@@ -67,8 +70,13 @@ const chatSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(sendMessage.pending, (state) => {
+      .addCase(sendMessage.pending, (state, action) => {
         state.sending = true;
+        state.messages.push({
+          role: "user",
+          content: { text: action.meta.arg.message },
+          createdAt: new Date(),
+        });
       })
 
       .addCase(sendMessage.fulfilled, (state, action) => {
