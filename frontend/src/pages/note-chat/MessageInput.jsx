@@ -1,22 +1,26 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "../../redux/features/chat";
+import toast from "react-hot-toast";
 
 function MessageInput() {
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
-  const { chat, sending, error } = useSelector((state) => state.chat);
+  const { chat, sending } = useSelector((state) => state.chat);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!message.trim()) return;
 
-    dispatch(
-      sendMessage({
-        chatId: chat.chatId,
-        message,
-      }),
+    await toast.promise(
+      dispatch(
+        sendMessage({
+          chatId: chat.chatId,
+          message,
+        }),
+      ).unwrap(),
+      { loading: "Loading...", success: "SuccessFull...", error: (err) => err },
     );
 
     setMessage("");
@@ -29,7 +33,7 @@ function MessageInput() {
     >
       <div className="flex items-center gap-3 px-4 py-2">
         <input
-          value={message || error}
+          value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Ask about your notes..."
           className="flex-1 outline-none bg-transparent"

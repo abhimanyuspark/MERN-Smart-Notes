@@ -81,22 +81,17 @@ export const addFilesToNote = async (req, res) => {
     const { noteId } = req.params;
 
     if (!req.files?.length) {
-      return res.status(400).json({
-        success: false,
-        message: "Please upload files",
-      });
+      return res
+        .status(400)
+        .json({ success: false, message: "Please upload files" });
     }
 
-    const note = await Note.findOne({
-      _id: noteId,
-      userId: req.user._id,
-    });
+    const note = await Note.findOne({ _id: noteId, userId: req.user._id });
 
     if (!note) {
-      return res.status(404).json({
-        success: false,
-        message: "Note not found",
-      });
+      return res
+        .status(404)
+        .json({ success: false, message: "Note not found" });
     }
 
     const { mediaIds, combinedText } = await processUploadedFiles(
@@ -104,20 +99,26 @@ export const addFilesToNote = async (req, res) => {
       note._id,
     );
 
+    // ✅ Analyse ONLY the newly uploaded files
+    const newFileInsights = await generateNoteInsights(combinedText);
+
+    // ✅ Merge text for storage
     const mergedText = [note.combinedText, combinedText]
       .filter(Boolean)
       .join("\n\n");
 
-    const aiData = await generateNoteInsights(mergedText);
-
     Object.assign(note, {
-      title: aiData?.title || note.title,
-      summary: aiData?.summary || note.summary,
-
-      suggestedQuestions: aiData?.questions || note.suggestedQuestions,
-
+      title: newFileInsights?.title || note.title,
+      summary: note.summary
+        ? `${note.summary}\n\n--- New Upload ---\n${newFileInsights?.summary}`
+        : newFileInsights?.summary,
+      suggestedQuestions: [
+        ...new Set([
+          ...(note.suggestedQuestions || []),
+          ...(newFileInsights?.questions || []),
+        ]),
+      ].slice(0, 10), // cap to 10 questions
       combinedText: mergedText,
-
       medias: [...note.medias, ...mediaIds],
     });
 
@@ -127,7 +128,6 @@ export const addFilesToNote = async (req, res) => {
       chatId: note.chatId,
       note,
       mediaIds,
-
       uploadedFiles: req.files.map((file) => ({
         name: file.originalname,
         type: file.mimetype,
@@ -137,18 +137,10 @@ export const addFilesToNote = async (req, res) => {
     await note.populate("medias");
     await note.populate("chatId");
 
-    return res.status(200).json({
-      success: true,
-      note,
-      chat,
-    });
+    return res.status(200).json({ success: true, note, chat });
   } catch (error) {
     console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
