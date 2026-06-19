@@ -1,6 +1,21 @@
 import Media from "../models/media.model.js";
 import { extractPdfText } from "./pdf.service.js";
 import { extractImageText } from "./ocr.service.js";
+import fs from "fs";
+import path from "path";
+
+// ✅ Ensure uploads folder exists on server start
+const uploadsDir = path.join(process.cwd(), "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const generateUniqueFileName = (originalName) => {
+  const ext = path.extname(originalName);
+  const timestamp = Date.now();
+  const random = Math.round(Math.random() * 1e9);
+  return `${timestamp}-${random}${ext}`;
+};
 
 export const processUploadedFiles = async (files, noteId) => {
   const results = await Promise.all(
@@ -11,6 +26,21 @@ export const processUploadedFiles = async (files, noteId) => {
 
       const mediaType = file.mimetype === "application/pdf" ? "pdf" : "image";
 
+      // ✅ Save buffer to disk and generate URL
+      const uniqueName = generateUniqueFileName(file.originalname);
+      const fileSavePath = path.join(uploadsDir, uniqueName);
+
+      let mediaUrl = "";
+
+      try {
+        fs.writeFileSync(fileSavePath, file.buffer);
+        mediaUrl = `/uploads/${uniqueName}`;
+        console.log("File saved to disk:", fileSavePath);
+      } catch (err) {
+        console.error("Failed to save file to disk:", err.message);
+      }
+
+      // ✅ Extract text from buffer
       let extractedText = "";
 
       try {
@@ -37,7 +67,7 @@ export const processUploadedFiles = async (files, noteId) => {
         noteId,
         mediaType,
         fileName: file.originalname,
-        mediaUrl: "",
+        mediaUrl, // ✅ now has actual path like /uploads/123456789.pdf
         mimeType: file.mimetype,
         fileSize: file.size,
         extractedText,

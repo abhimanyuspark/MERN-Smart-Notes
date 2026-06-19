@@ -3,6 +3,7 @@ const app = express();
 import { config } from "dotenv";
 config({ quiet: true });
 import cors from "cors";
+import path from "path";
 import { connectDB } from "./config/connectDB.js";
 import authRoutes from "./routes/auth.route.js";
 import noteRoutes from "./routes/note.route.js";
@@ -32,7 +33,7 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);
