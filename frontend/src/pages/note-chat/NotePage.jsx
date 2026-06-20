@@ -5,11 +5,14 @@ import { uploadNoteId } from "../../redux/features/note";
 import NoteChat from "./NoteChat";
 import Loading from "../../components/common/Loading";
 import Error from "../../components/common/Error";
+import useDeviceType from "../../hooks/useDeviceType";
+import NoteChatMobile from "../../components/note/NoteChatMobile";
 
 export default function NotePage() {
   const { id } = useParams();
   const { note, loading, error } = useSelector((state) => state.notes);
   const dispatch = useDispatch();
+  const { deviceType, isMobile, isTablet, isDesktop } = useDeviceType();
 
   useEffect(() => {
     if (id) {
@@ -25,5 +28,10 @@ export default function NotePage() {
     return <Error error={error} />;
   }
 
-  return <NoteChat />;
+  return (
+    <>
+      {isDesktop && <NoteChat />}
+      {isMobile && <NoteChatMobile />}
+    </>
+  );
 }
