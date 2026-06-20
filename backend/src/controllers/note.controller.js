@@ -64,7 +64,6 @@ export const createNoteWithFiles = async (req, res) => {
     return res.status(201).json({
       success: true,
       note,
-      chat,
     });
   } catch (error) {
     console.error(error);
@@ -99,10 +98,8 @@ export const addFilesToNote = async (req, res) => {
       note._id,
     );
 
-    // ✅ Analyse ONLY the newly uploaded files
     const newFileInsights = await generateNoteInsights(combinedText);
 
-    // ✅ Merge text for storage
     const mergedText = [note.combinedText, combinedText]
       .filter(Boolean)
       .join("\n\n");
@@ -117,14 +114,14 @@ export const addFilesToNote = async (req, res) => {
           ...(note.suggestedQuestions || []),
           ...(newFileInsights?.questions || []),
         ]),
-      ].slice(0, 10), // cap to 10 questions
+      ].slice(0, 10),
       combinedText: mergedText,
       medias: [...note.medias, ...mediaIds],
     });
 
     await note.save();
 
-    const chat = await updateNoteChat({
+    const message = await updateNoteChat({
       chatId: note.chatId,
       note,
       mediaIds,
@@ -134,10 +131,13 @@ export const addFilesToNote = async (req, res) => {
       })),
     });
 
-    await note.populate("medias");
-    await note.populate("chatId");
+    await note.populate({ path: "medias", match: { _id: { $in: mediaIds } } });
 
-    return res.status(200).json({ success: true, note, chat });
+    return res.status(200).json({
+      success: true,
+      media: note.medias?.[0],
+      message,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: error.message });

@@ -36,7 +36,7 @@ const NoteChat = () => {
   return (
     <div ref={containerRef} className="flex h-full w-full">
       <aside
-        className="overflow-y-scroll shrink-0 bg-base-300 rounded"
+        className="shrink-0 bg-base-300 rounded"
         style={{ width: leftWidth }}
       >
         {/* Sidebar */}
@@ -50,7 +50,7 @@ const NoteChat = () => {
         className="bg-transparent hover:bg-gray-200 ml-1"
       />
 
-      <div className="mx-1 flex-1 bg-base-300 rounded overflow-y-scroll">
+      <div className="mx-1 flex-1 bg-base-300 rounded">
         <ChatPage />
       </div>
 
@@ -62,7 +62,7 @@ const NoteChat = () => {
       />
 
       <aside
-        className="overflow-y-scroll shrink-0 bg-base-300 rounded"
+        className="shrink-0 bg-base-300 rounded"
         style={{ width: rightWidth }}
       >
         {/* StatusSidebar */}

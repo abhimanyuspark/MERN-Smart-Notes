@@ -93,15 +93,12 @@ const noteSlice = createSlice({
       })
 
       .addCase(addFilesToNote.pending, (state, action) => {
-        state.loading = true;
         state.error = null;
       })
       .addCase(addFilesToNote.fulfilled, (state, action) => {
-        state.loading = false;
-        state.note = action.payload.note;
+        state.note.medias.push(action.payload?.media);
       })
       .addCase(addFilesToNote.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload;
       })
 

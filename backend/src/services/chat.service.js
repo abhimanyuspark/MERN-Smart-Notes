@@ -62,9 +62,8 @@ export const updateNoteChat = async ({
 
   chat.extractedContext = note.combinedText;
 
-  chat.messages.push({
+  const newMessage = {
     role: "assistant",
-
     content: buildDocumentMessage({
       action: "updated",
       title: note.title,
@@ -72,11 +71,13 @@ export const updateNoteChat = async ({
       suggestedQuestions: note.suggestedQuestions,
       uploadedFiles,
     }),
-
     createdAt: new Date(),
-  });
+  };
+
+  chat.messages.push(newMessage);
 
   await chat.save();
 
-  return chat;
+  // Return only the newly added message from saved doc
+  return chat.messages[chat.messages.length - 1];
 };

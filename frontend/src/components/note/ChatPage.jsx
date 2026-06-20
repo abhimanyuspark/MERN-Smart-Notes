@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getChatMessages } from "../../redux/features/chat";
 import ChatMessages from "./ChatMessage";
 import MessageInput from "./MessageInput";
+import ChatHeader from "./ChatHeader";
 
 function ChatPage() {
   const dispatch = useDispatch();
@@ -17,8 +18,11 @@ function ChatPage() {
   }, [id]);
 
   return (
-    <div className="flex flex-col gap-4 relative h-full">
-      <ChatMessages />
+    <div className="flex flex-col gap-2 relative h-full">
+      <ChatHeader />
+      <div className="overflow-y-scroll h-full">
+        <ChatMessages />
+      </div>
       <MessageInput />
     </div>
   );

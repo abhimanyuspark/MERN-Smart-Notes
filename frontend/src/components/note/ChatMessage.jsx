@@ -20,19 +20,21 @@ function ChatMessages() {
   }
 
   return (
-    <div className="flex gap-4 flex-col p-2">
+    <div className="flex flex-col px-2">
       <h2 className="text-3xl mx-2 my-8 font-bold">
         {String(chat?.title).split(" - ").at(1)}
       </h2>
 
-      {messages.map((msg, index) => {
-        const type = typeof msg.content === "string";
-        if (!type) {
-          return <MessageBubble key={index} message={msg} />;
-        } else {
-          return <MessageString key={index} msg={msg} index={index} />;
-        }
-      })}
+      <div className="flex gap-4 flex-col">
+        {messages.map((msg, index) => {
+          const type = typeof msg.content === "string";
+          if (!type) {
+            return <MessageBubble key={index} message={msg} />;
+          } else {
+            return <MessageString key={index} msg={msg} index={index} />;
+          }
+        })}
+      </div>
 
       <div ref={bottomRef} />
     </div>

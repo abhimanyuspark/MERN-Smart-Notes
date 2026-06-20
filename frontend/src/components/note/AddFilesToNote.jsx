@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UploadModal from "../__comp/UploadModal";
 import { addFilesToNote } from "../../redux/features/note";
+import { addChat } from "../../redux/features/chat";
 
 export default function AddFilesToNote() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,6 +46,7 @@ export default function AddFilesToNote() {
             .then((res) => {
               if (res?.success) {
                 onClose();
+                dispatch(addChat(res));
               }
             })
         }

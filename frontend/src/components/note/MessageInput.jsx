@@ -20,17 +20,14 @@ function MessageInput() {
           message,
         }),
       ).unwrap(),
-      { loading: "Loading...", success: "SuccessFull...", error: (err) => err },
+      { loading: "Sending...", success: "SuccessFull...", error: (err) => err },
     );
 
     setMessage("");
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-base-200 sticky bottom-0 rounded left-0 right-0 w-full"
-    >
+    <form onSubmit={handleSubmit} className="bg-base-200 rounded w-full">
       <div className="flex items-center gap-3 px-4 py-2">
         <input
           value={message}

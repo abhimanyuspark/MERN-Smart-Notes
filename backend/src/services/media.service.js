@@ -4,7 +4,7 @@ import { extractImageText } from "./ocr.service.js";
 import fs from "fs";
 import path from "path";
 
-// ✅ Ensure uploads folder exists on server start
+// Ensure uploads folder exists on server start
 const uploadsDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -26,7 +26,7 @@ export const processUploadedFiles = async (files, noteId) => {
 
       const mediaType = file.mimetype === "application/pdf" ? "pdf" : "image";
 
-      // ✅ Save buffer to disk and generate URL
+      // Save buffer to disk and generate URL
       const uniqueName = generateUniqueFileName(file.originalname);
       const fileSavePath = path.join(uploadsDir, uniqueName);
 
@@ -40,7 +40,7 @@ export const processUploadedFiles = async (files, noteId) => {
         console.error("Failed to save file to disk:", err.message);
       }
 
-      // ✅ Extract text from buffer
+      // Extract text from buffer
       let extractedText = "";
 
       try {
@@ -67,7 +67,7 @@ export const processUploadedFiles = async (files, noteId) => {
         noteId,
         mediaType,
         fileName: file.originalname,
-        mediaUrl, // ✅ now has actual path like /uploads/123456789.pdf
+        mediaUrl,
         mimeType: file.mimetype,
         fileSize: file.size,
         extractedText,
