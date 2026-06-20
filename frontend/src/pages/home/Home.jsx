@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import UploadModal from "../../components/__comp/UploadModal";
 import Error from "../../components/common/Error";
 import Loading from "../../components/common/Loading";
-import CreateNote from "./CreateNote";
+import CreateNote from "../../components/__comp/CreateNote";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -16,24 +16,17 @@ export default function Home() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center">
-        <Loading />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center">
-        <Error error={error} />
-      </div>
-    );
+    return <Error error={error} />;
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 *:h-24 gap-4">
       <CreateNote />
+
       {notes.map((note) => (
         <Link
           to={`/note/${note._id}`}
@@ -41,7 +34,7 @@ export default function Home() {
           className="bg-base-200 p-4 rounded"
         >
           <h2 className="font-bold">{note.title}</h2>
-          <p className="text-sm opacity-70">{note.summary?.slice(0, 80)}</p>
+          <p className="text-sm opacity-70 truncate h-24">{note.summary}</p>
         </Link>
       ))}
     </div>

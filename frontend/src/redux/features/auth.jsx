@@ -4,7 +4,8 @@ import { errorFun } from "../../utils/errFun";
 
 const initial = {
   auth: null,
-  loading: false,
+  isLogin: false,
+  loading: true,
   error: null,
 };
 
@@ -72,6 +73,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.isLogin = true;
         state.auth = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -85,6 +87,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.isLogin = true;
         state.auth = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -98,6 +101,7 @@ const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.loading = false;
+        state.isLogin = false;
         state.auth = null;
       })
       .addCase(logout.rejected, (state, action) => {
@@ -111,6 +115,7 @@ const authSlice = createSlice({
       })
       .addCase(refresh.fulfilled, (state, action) => {
         state.loading = false;
+        state.isLogin = true;
         state.auth = action.payload;
       })
       .addCase(refresh.rejected, (state, action) => {

@@ -1,11 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { uploadNote } from "../../redux/features/note";
 
-export default function UploadModal({ isOpen, onClose }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+export default function UploadModal({ isOpen, onClose, onUpload }) {
   const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -18,7 +13,6 @@ export default function UploadModal({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
-  // Close on Escape key
   useEffect(() => {
     const handler = (e) => {
       if (e.key === "Escape") onClose();
@@ -47,16 +41,9 @@ export default function UploadModal({ isOpen, onClose }) {
     const formData = new FormData();
     files.forEach((f) => formData.append("files", f));
     setStatus("uploading");
-    dispatch(uploadNote(formData))
-      .unwrap()
-      .then((res) => {
-        setStatus("done");
-        // console.log("Upload successful:", res);
-        if (res?.success) {
-          setTimeout(() => navigate(`/note/${res?.note?._id}`), 500);
-          onClose();
-        }
-      })
+
+    Promise.resolve(onUpload(formData))
+      .then(() => setStatus("done"))
       .catch((err) => {
         console.error("Upload error:", err);
         setStatus("idle");
@@ -70,7 +57,6 @@ export default function UploadModal({ isOpen, onClose }) {
   };
 
   return (
-    // Backdrop
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onClick={(e) => {

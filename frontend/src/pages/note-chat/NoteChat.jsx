@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import ChatPage from "./ChatPage";
-import NoteDetails from "../../components/__comp/NoteDetails";
+import ChatPage from "../../components/note/ChatPage";
+import NoteSource from "../../components/note/NoteSource";
 
 const NoteChat = () => {
   const containerRef = useRef(null);
@@ -40,7 +40,7 @@ const NoteChat = () => {
         style={{ width: leftWidth }}
       >
         {/* Sidebar */}
-        <NoteDetails />
+        <NoteSource />
       </aside>
 
       {/* left resizer */}

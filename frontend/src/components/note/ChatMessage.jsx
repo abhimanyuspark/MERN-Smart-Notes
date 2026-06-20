@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import MessageBubble from "./MessageBubble";
 import MessageString from "./MessageString";
+import Loading from "../common/Loading";
 
 function ChatMessages() {
   const { chat, messages, loading } = useSelector((state) => state.chat);
@@ -15,7 +16,7 @@ function ChatMessages() {
   }, [messages]);
 
   if (loading) {
-    return <div className="flex items-center justify-center">Loading...</div>;
+    return <Loading />;
   }
 
   return (

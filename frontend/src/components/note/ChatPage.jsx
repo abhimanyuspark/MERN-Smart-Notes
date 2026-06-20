@@ -8,10 +8,12 @@ import MessageInput from "./MessageInput";
 function ChatPage() {
   const dispatch = useDispatch();
   const { note } = useSelector((state) => state.notes);
-  const id = note.chatId._id;
+  const id = note?.chatId?._id;
 
   useEffect(() => {
-    dispatch(getChatMessages(id));
+    if (id) {
+      dispatch(getChatMessages(id));
+    }
   }, [id]);
 
   return (

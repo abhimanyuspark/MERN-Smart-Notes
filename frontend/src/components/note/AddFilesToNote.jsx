@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import UploadSource from "./UploadSource";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import UploadModal from "../__comp/UploadModal";
+import { addFilesToNote } from "../../redux/features/note";
 
 export default function AddFilesToNote() {
   const [isOpen, setIsOpen] = useState(false);
   const { note } = useSelector((state) => state.notes);
+  const dispatch = useDispatch();
+  const onClose = () => {
+    setIsOpen(false);
+  };
 
   return (
     <div className="p-2">
@@ -29,10 +34,20 @@ export default function AddFilesToNote() {
         Add Files To Note
       </button>
 
-      <UploadSource
+      <UploadModal
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        noteId={note?._id}
+        onClose={() => {
+          onClose();
+        }}
+        onUpload={(formData) =>
+          dispatch(addFilesToNote({ noteId: note?._id, data: formData }))
+            .unwrap()
+            .then((res) => {
+              if (res?.success) {
+                onClose();
+              }
+            })
+        }
       />
     </div>
   );

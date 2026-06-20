@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../common/Loading";
 import AddFilesToNote from "./AddFilesToNote";
-import ShowMedia from "./ShowMedia";
+import ShowMedia from "../__comp/ShowMedia";
 
-const NoteDetails = () => {
+const NoteSource = () => {
   const { note, loading } = useSelector((state) => state.notes);
   const [media, setMedia] = useState(null);
 
@@ -80,4 +80,4 @@ const NoteDetails = () => {
   );
 };
 
-export default NoteDetails;
+export default NoteSource;

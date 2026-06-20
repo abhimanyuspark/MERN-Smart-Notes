@@ -1,12 +1,13 @@
 import React, { Suspense, useEffect } from "react";
 import { Home, NotFound, Login, Register, Settings, NoteChat } from "./pages";
-import Loading from "./components/common/Loading";
+import PageLoader from "./components/common/PageLoader";
 import { Route, Routes } from "react-router";
 import { Toaster } from "react-hot-toast";
 import UserLayout from "./components/__comp/UserLayout";
 import { refresh } from "./redux/features/auth";
 import { useDispatch } from "react-redux";
 import NotePage from "./pages/note-chat/NotePage";
+import ProtectedRoute from "./components/__comp/ProtectedRoute";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -16,29 +17,18 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
-        <Route element={<UserLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/note/:id" element={<NotePage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<UserLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/note/:id" element={<NotePage />} />
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/settings" element={<Settings />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
         </Route>
-
-        {/* <Route path="about" element={<About />} /> */}
-
-        {/* <Route element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          </Route> */}
-
-        {/* <Route path="concerts">
-          <Route index element={<ConcertsHome />} />
-          <Route path=":city" element={<City />} />
-          <Route path="trending" element={<Trending />} />
-          </Route> */}
 
         <Route path="*" element={<NotFound />} />
       </Routes>
