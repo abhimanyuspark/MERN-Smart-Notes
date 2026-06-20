@@ -23,11 +23,13 @@ const App = () => {
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/note/:id" element={<NotePage />} />
-
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/settings" element={<Settings />} />
           </Route>
+        </Route>
+
+        <Route element={<UserLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
