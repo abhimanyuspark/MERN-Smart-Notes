@@ -13,7 +13,7 @@ export default function AddFilesToNote() {
   };
 
   return (
-    <div className="p-2">
+    <div className="p-2 pt-0">
       <button
         onClick={() => setIsOpen(true)}
         className="btn btn-accent rounded size-full"

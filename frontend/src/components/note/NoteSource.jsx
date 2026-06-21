@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import Loading from "../common/Loading";
 import AddFilesToNote from "./AddFilesToNote";
 import ShowMedia from "../__comp/ShowMedia";
-import ChatHeader from "./ChatHeader";
 
 const NoteSource = () => {
   const { note, loading } = useSelector((state) => state.notes);
@@ -18,12 +17,10 @@ const NoteSource = () => {
   }
 
   return (
-    <>
-      <ChatHeader content="Source" />
-
+    <div className="flex flex-col h-full gap-2">
       <AddFilesToNote />
 
-      <ul className="p-2 overflow-y-scroll">
+      <ul className="overflow-y-scroll h-full px-2">
         {note?.medias?.map((m, i) => (
           <li
             key={i}
@@ -79,7 +76,7 @@ const NoteSource = () => {
           type={media?.mediaType}
         />
       )}
-    </>
+    </div>
   );
 };
 

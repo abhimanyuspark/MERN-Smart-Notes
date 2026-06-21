@@ -1,12 +1,19 @@
 import React, { Suspense, useEffect } from "react";
-import { Home, NotFound, Login, Register, Settings, NoteChat } from "./pages";
+import {
+  Home,
+  NotFound,
+  Login,
+  Register,
+  Settings,
+  NotePage,
+  ProfilePage,
+} from "./pages";
 import PageLoader from "./components/common/PageLoader";
 import { Route, Routes } from "react-router";
 import { Toaster } from "react-hot-toast";
 import UserLayout from "./components/__comp/UserLayout";
 import { refresh } from "./redux/features/auth";
 import { useDispatch } from "react-redux";
-import NotePage from "./pages/note-chat/NotePage";
 import ProtectedRoute from "./components/__comp/ProtectedRoute";
 
 const App = () => {
@@ -23,6 +30,7 @@ const App = () => {
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/note/:id" element={<NotePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Route>
 

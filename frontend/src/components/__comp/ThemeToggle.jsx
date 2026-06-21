@@ -8,7 +8,7 @@ const ThemeToggle = () => {
   const dispatch = useDispatch();
 
   return (
-    <ul className="flex gap-4 flex-wrap">
+    <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-6">
       {themes.map((d, i) => (
         <li
           data-theme={d}

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import ChatPage from "../../components/note/ChatPage";
-import NoteSource from "../../components/note/NoteSource";
+import ChatPage from "./ChatPage";
+import NoteSource from "./NoteSource";
+import ChatHeader from "./ChatHeader";
+import NoteStudio from "./NoteStudio";
 
 const NoteChat = () => {
   const containerRef = useRef(null);
@@ -14,11 +16,11 @@ const NoteChat = () => {
       const rect = containerRef.current.getBoundingClientRect();
       if (dragging.current === "left") {
         let newW = e.clientX - rect.left;
-        newW = Math.max(120, Math.min(600, newW));
+        newW = Math.max(200, Math.min(600, newW));
         setLeftWidth(newW);
       } else if (dragging.current === "right") {
         let newW = rect.right - e.clientX;
-        newW = Math.max(120, Math.min(600, newW));
+        newW = Math.max(200, Math.min(600, newW));
         setRightWidth(newW);
       }
     };
@@ -36,10 +38,11 @@ const NoteChat = () => {
   return (
     <div ref={containerRef} className="flex h-full w-full">
       <aside
-        className="shrink-0 bg-base-300 rounded"
+        className="shrink-0 bg-base-300 rounded h-full flex flex-col gap-2"
         style={{ width: leftWidth }}
       >
         {/* Sidebar */}
+        <ChatHeader content="Source" />
         <NoteSource />
       </aside>
 
@@ -50,7 +53,8 @@ const NoteChat = () => {
         className="bg-transparent hover:bg-gray-200 ml-1"
       />
 
-      <div className="mx-1 flex-1 bg-base-300 rounded">
+      <div className="mx-1 flex-1 bg-base-300 rounded flex gap-2 flex-col h-full">
+        <ChatHeader content="Chat" />
         <ChatPage />
       </div>
 
@@ -65,7 +69,9 @@ const NoteChat = () => {
         className="shrink-0 bg-base-300 rounded"
         style={{ width: rightWidth }}
       >
+        <ChatHeader content="Studio" />
         {/* StatusSidebar */}
+        <NoteStudio />
       </aside>
     </div>
   );

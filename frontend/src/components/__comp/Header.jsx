@@ -61,10 +61,10 @@ const Header = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a className="justify-between">
+              <Link to={"/profile"} className="justify-between">
                 {auth?.name} <span className="text-xs">Profile</span>
                 <span className="badge">New</span>
-              </a>
+              </Link>
             </li>
             <li>
               <Link to="/settings">Settings</Link>

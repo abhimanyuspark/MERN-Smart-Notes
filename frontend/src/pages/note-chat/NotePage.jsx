@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadNoteId } from "../../redux/features/note";
-import NoteChat from "./NoteChat";
+import NoteChat from "../../components/note/NoteChat";
 import Loading from "../../components/common/Loading";
 import Error from "../../components/common/Error";
 import useDeviceType from "../../hooks/useDeviceType";
@@ -32,6 +32,7 @@ export default function NotePage() {
     <>
       {isDesktop && <NoteChat />}
       {isMobile && <NoteChatMobile />}
+      {isTablet && <NoteChatMobile />}
     </>
   );
 }

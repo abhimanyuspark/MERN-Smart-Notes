@@ -18,13 +18,12 @@ function ChatPage() {
   }, [id]);
 
   return (
-    <div className="flex flex-col gap-2 h-full">
-      <ChatHeader />
+    <>
       <div className="overflow-y-scroll h-full">
         <ChatMessages />
       </div>
       <MessageInput />
-    </div>
+    </>
   );
 }
 
