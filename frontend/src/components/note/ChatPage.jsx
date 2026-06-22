@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getChatMessages } from "../../redux/features/chat";
+import { clearChat, getChatMessages } from "../../redux/features/chat";
 import ChatMessages from "./ChatMessage";
 import MessageInput from "./MessageInput";
 import ChatHeader from "./ChatHeader";
@@ -15,6 +15,8 @@ function ChatPage() {
     if (id) {
       dispatch(getChatMessages(id));
     }
+
+    return () => dispatch(clearChat());
   }, [id]);
 
   return (

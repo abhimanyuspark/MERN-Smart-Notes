@@ -83,7 +83,7 @@ export default function UploadModal({ isOpen, onClose, onUpload }) {
                 />
               </svg>
             </div>
-            <span className="text-sm font-medium">New note</span>
+            <span className="text-sm font-medium">Upload Files</span>
           </div>
           <button
             onClick={onClose}

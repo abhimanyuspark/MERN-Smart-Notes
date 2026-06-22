@@ -38,7 +38,7 @@ function MessageInput() {
 
         <button
           type="submit"
-          className={`btn btn-accent rounded ${!message.trim() ? "cursor-not-allowed" : "cursor-pointer"}`}
+          className={`btn btn-accent rounded ${!message.trim() || sending ? "cursor-not-allowed" : "cursor-pointer"}`}
         >
           {sending ? "Sending..." : "Send"}
         </button>

@@ -4,7 +4,7 @@ import {
   createNoteWithFiles,
   getAllNotes,
   getSingleNote,
-  deleteNote,
+  deleteMultipleNotes,
   addFilesToNote,
 } from "../controllers/note.controller.js";
 
@@ -32,6 +32,6 @@ router.get("/", protectRoute, getAllNotes);
 
 router.get("/:id", protectRoute, getSingleNote);
 
-router.delete("/:id", protectRoute, deleteNote);
+router.delete("/delete-multiple", protectRoute, deleteMultipleNotes);
 
 export default router;

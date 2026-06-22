@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadNoteId } from "../../redux/features/note";
+import { noteClear, uploadNoteId } from "../../redux/features/note";
 import NoteChat from "../../components/note/NoteChat";
 import Loading from "../../components/common/Loading";
 import Error from "../../components/common/Error";
@@ -18,6 +18,8 @@ export default function NotePage() {
     if (id) {
       dispatch(uploadNoteId(id));
     }
+
+    return () => dispatch(noteClear());
   }, [dispatch, id]);
 
   if (loading) {

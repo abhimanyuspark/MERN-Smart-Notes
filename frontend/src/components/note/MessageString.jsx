@@ -19,7 +19,7 @@ const MessageString = ({ msg, index }) => {
   };
 
   return (
-    <div key={index} className="rounded p-4 bg-base-100">
+    <div key={index} className="rounded p-4 bg-base-100 overflow-x-auto">
       <p>{content?.summary}</p>
 
       <div className="mt-5">

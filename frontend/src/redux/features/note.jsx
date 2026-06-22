@@ -57,15 +57,37 @@ export const uploadNoteId = createAsyncThunk(
   },
 );
 
+export const deleteNotes = createAsyncThunk(
+  "notes/deleteNote",
+  async (noteIds, { rejectWithValue }) => {
+    try {
+      await api.delete("/notes/delete-multiple", {
+        data: {
+          noteIds: noteIds,
+        },
+      });
+    } catch (error) {
+      const errMsg = errorFun(error);
+      return rejectWithValue(errMsg);
+    }
+  },
+);
+
+const initialState = {
+  notes: [],
+  note: null,
+  loading: false,
+  error: null,
+};
+
 const noteSlice = createSlice({
   name: "notes",
-  initialState: {
-    notes: [],
-    note: null,
-    loading: false,
-    error: null,
+  initialState,
+  reducers: {
+    noteClear: (state) => {
+      state.note = null;
+    },
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchNotes.pending, (state, action) => {
@@ -114,8 +136,22 @@ const noteSlice = createSlice({
       .addCase(uploadNoteId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      .addCase(deleteNotes.pending, (state, action) => {
+        state.error = null;
+      })
+      .addCase(deleteNotes.fulfilled, (state, action) => {
+        state.notes = state.notes.filter(
+          (note) => !action.meta.arg.includes(note._id),
+        );
+      })
+      .addCase(deleteNotes.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });
+
+export const { noteClear } = noteSlice.actions;
 
 export default noteSlice.reducer;

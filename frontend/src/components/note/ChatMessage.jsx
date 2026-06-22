@@ -5,15 +5,17 @@ import MessageString from "./MessageString";
 import Loading from "../common/Loading";
 
 function ChatMessages() {
-  const { chat, messages, loading } = useSelector((state) => state.chat);
+  const { chat, messages, loading, sending } = useSelector(
+    (state) => state.chat,
+  );
 
-  const bottomRef = useRef();
+  const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [messages]);
+  }, [messages, sending]);
 
   if (loading) {
     return <Loading />;
@@ -22,21 +24,32 @@ function ChatMessages() {
   return (
     <div className="flex flex-col px-2">
       <h2 className="text-3xl mx-2 my-8 font-bold">
-        {String(chat?.title).split(" - ").at(1)}
+        {String(chat?.title || "")
+          .split(" - ")
+          .at(1)}
       </h2>
 
-      <div className="flex gap-4 flex-col">
+      <div className="flex flex-col gap-4">
         {messages.map((msg, index) => {
-          const type = typeof msg.content === "string";
-          if (!type) {
-            return <MessageBubble key={index} message={msg} />;
-          } else {
-            return <MessageString key={index} msg={msg} index={index} />;
-          }
-        })}
-      </div>
+          const isString = typeof msg.content === "string";
 
-      <div ref={bottomRef} />
+          return isString ? (
+            <MessageString key={msg._id || index} msg={msg} index={index} />
+          ) : (
+            <MessageBubble key={msg._id || index} message={msg} />
+          );
+        })}
+
+        {sending && (
+          <div className="flex justify-start">
+            <div className="bg-accent text-accent-content rounded px-4 py-2 font-medium animate-pulse">
+              Thinking...
+            </div>
+          </div>
+        )}
+
+        <div ref={bottomRef} />
+      </div>
     </div>
   );
 }

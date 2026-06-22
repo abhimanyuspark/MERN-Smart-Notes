@@ -5,7 +5,9 @@ function MessageBubble({ message }) {
   const isUser = message.role === "user";
 
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+    <div
+      className={`flex ${isUser ? "justify-end" : "justify-start"} overflow-x-auto`}
+    >
       <div
         className={`rounded px-4 py-3 shadow-sm ${isUser ? "bg-primary" : "bg-base-100"}`}
       >

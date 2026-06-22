@@ -193,39 +193,75 @@ export const getSingleNote = async (req, res) => {
   }
 };
 
-export const deleteNote = async (req, res) => {
+export const deleteMultipleNotes = async (req, res) => {
   try {
-    const note = await Note.findOne({
-      _id: req.params.id,
-      userId: req.user._id,
-    }).populate("medias");
+    const { noteIds } = req.body;
 
-    if (!note) {
-      return res.status(404).json({
+    if (!Array.isArray(noteIds) || noteIds.length === 0) {
+      return res.status(400).json({
         success: false,
-        message: "Note not found",
+        message: "Please provide noteIds array",
       });
     }
 
-    for (const media of note.medias) {
-      const filePath = path.join(process.cwd(), "uploads", media.fileName);
+    const notes = await Note.find({
+      _id: { $in: noteIds },
+      userId: req.user._id,
+    }).populate("medias");
 
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+    if (!notes.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No notes found",
+      });
+    }
+
+    const mediaIds = [];
+    const chatIds = [];
+    const noteDeleteIds = [];
+
+    for (const note of notes) {
+      noteDeleteIds.push(note._id);
+
+      // Delete media files
+      for (const media of note.medias) {
+        const filePath = path.join(process.cwd(), "uploads", media.fileName);
+
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+
+        mediaIds.push(media._id);
       }
 
-      await Media.findByIdAndDelete(media._id);
+      // Collect chat ids
+      if (note.chatId) {
+        chatIds.push(note.chatId);
+      }
     }
 
-    if (note.chatId) {
-      await Chat.findByIdAndDelete(note.chatId);
+    // Delete all media documents
+    if (mediaIds.length) {
+      await Media.deleteMany({
+        _id: { $in: mediaIds },
+      });
     }
 
-    await Note.findByIdAndDelete(note._id);
+    // Delete all chats
+    if (chatIds.length) {
+      await Chat.deleteMany({
+        _id: { $in: chatIds },
+      });
+    }
+
+    // Delete all notes
+    await Note.deleteMany({
+      _id: { $in: noteDeleteIds },
+    });
 
     return res.status(200).json({
       success: true,
-      message: "Note deleted successfully",
+      message: `${noteDeleteIds.length} notes deleted successfully`,
     });
   } catch (error) {
     return res.status(500).json({

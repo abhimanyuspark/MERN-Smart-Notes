@@ -16,7 +16,7 @@ export default function CreateNote() {
     <div>
       <button
         onClick={() => setIsOpen(true)}
-        className="btn btn-info rounded w-full h-24"
+        className="btn btn-secondary rounded w-full h-24"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
